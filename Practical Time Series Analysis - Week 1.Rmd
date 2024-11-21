@@ -1,0 +1,413 @@
+---
+title: "Practical Time Series Analysis"
+author: "Afifa Nur Mila"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+---
+
+# 1. Preparing R (Install and Using Package)
+
+What have i learned?
+I have learned about:
+- How to install packages and using it
+- How to call data in packages and using it
+
+Install package faraway
+```{r}
+#install.packages("faraway")
+```
+Panggil library faraway
+```{r}
+library(faraway)
+```
+
+Melihat data dalam package faraway
+```{r}
+data(package="faraway")
+```
+
+Mengambil data coagulation dalam package faraway
+```{r}
+coagulation
+```
+
+Plot data coagulation
+```{r}
+plot(coag~diet, data=coagulation)
+```
+```{r}
+summary(coagulation)
+```
+
+## Question
+Dalam paket jauh, kami memiliki kumpulan data bernama "worldcup" yang memberikan berbagai data R: tentang pemain dari Piala Dunia 2010. Variabel "Time" memberi tahu kita waktu yang dimainkan dalam menit oleh berbagai pemain. 
+
+Setelah Anda menginstal dan memuat paket faraway, cari waktu rata-rata yang dimainkan dengan menggunakan perintah
+
+mean(worldcup$Waktu)
+
+Berapa waktu rata-rata yang dimainkan? Anda dapat membulatkan ke 2 atau tiga tempat setelah titik desimal.
+
+Install
+```{r}
+#install.packages("worldcup")
+```
+
+```{r}
+#library(worldcup)
+```
+```{r}
+mean(worldcup$Waktu)
+```
+
+
+# 2. Introduction to R
+
+What have i learned?
+I have learned:
+- How to enter a dataset in R using concatenation c()
+- How to find five-number summary of a dataset in R using summary() function
+- How to obtain sample mean and sample standard deviation of a dataset in R using mean() and sd() functions
+
+Commenting in R using #
+```{r}
+#this is comment
+```
+
+Entering dataset in R using concatenation operator c()
+```{r}
+#data={35,8,9,10}
+data.1=c(35,8,9,10)
+
+#call data.1
+data.1
+```
+Finding summary statistics of data.1
+```{r}
+summary(data.1)
+```
+Finding mean
+```{r}
+mean(data.1)
+```
+Other way of finding mean
+```{r}
+sum(data.1)/4
+```
+Finding standar deviation of data.1
+```{r}
+sd(data.1)
+```
+
+# 3. Histogram in R
+
+What have i learned?
+I have learned about:
+- how to find histogram of a dataset with frequencies or probability on the y-axis
+- how to change the bin width in a histogram
+- how to impose a smooth density over a histogram
+- how change colour and line width in a histogram.
+
+We have a small dataset like this
+```{r}
+small.size.dataset=c(91,49,76,112,97,42,70, 100, 8, 112, 95, 90, 78, 62, 56, 94, 65, 58, 109, 70, 109, 91, 71, 76, 68, 62, 134, 57, 83, 66)
+```
+
+Make a histogram from the dataset
+```{r}
+hist(small.size.dataset)
+```
+
+Change X-label name
+```{r}
+hist(small.size.dataset, xlab='My data points')
+```
+
+Change title of the histogram
+```{r}
+hist(small.size.dataset, xlab='My data points', main='Histogram of My data')
+```
+
+Using Density or probability by change frequency as false
+```{r}
+hist(small.size.dataset, xlab='My data points', main='Histogram of My Data', freq=F)
+```
+
+Change colour of histogram
+```{r}
+hist(small.size.dataset, xlab='my data points', main='Histogram of my data', freq=F, col='green')
+```
+
+Make lines of histogram
+*note: run bareng
+```{r}
+# Membuat histogram dari dataset
+hist(small.size.dataset, prob = TRUE, xlab='data',main = "Histogram with Density Curve",col='green')
+
+# Menambahkan garis density
+lines(density(small.size.dataset), col = "blue", lwd = 2)
+
+```
+
+Change size of bin by increasing breakpoint
+```{r}
+hist(small.size.dataset, xlab='my data point', main="Histogram of My data",freq=F, col='yellow',breaks=10)
+
+lines(density(small.size.dataset), col='red',lwd=2)
+```
+
+
+# 4. Scatterplot in R
+
+what i have learned?
+I have learned about:
+- how to plot bivariate data
+- how to obtain scatterplot with titles and labels.
+
+Pembangkitan bilangan acak atau variabel random.
+```{r}
+# set seed for set data to having a same random data.
+
+set.seed(2016)
+Test_1_scores=round(rnorm(50,78,10))
+Test_2_scores=round(rnorm(50,70,14))
+```
+
+Arti rnorm= In R, rnorm adalah fungsi yang digunakan untuk menghasilkan sekumpulan angka acak atau bilangan random yang diambil dari distribusi normal, atau disebut juga dengan pembangkitan bilangan acak dari distribusi normal. 
+Parameter dalam rnorm yaitu rnorm(n,mean,sd).
+n = banyaknya data yang akan dibangkitkan
+mean = rata-rata dari data yang akan dibangkitkan (default 0)
+sd = standar deviasi dari data yang akan dibangkitkan (default 1)
+
+```{r}
+Test_1_scores
+```
+```{r}
+Test_2_scores
+```
+```{r}
+plot(Test_2_scores~Test_1_scores)
+```
+
+```{r}
+#give a name of x-label, y-label, title of scatterplot, and colour of datapoints
+
+plot(Test_2_scores~Test_1_scores, main='Test scores for Two Exams (50 students)',xlab='Test 1 score',ylab='Test 2 score',col='blue')
+```
+
+
+# 5. Introduction to R - Reviewing Basic Statistics
+
+What we have lerned?
+We have learned about:
+- plot time series data
+- fit a linear model to a set of ordered pairs
+
+## A. Basic Statistics Review - Linear Regression
+
+Objectives:
+Perform a simple linear regression with R
+- plot time series data
+- fit a linear model to a set of ordered pairs
+- asses normality of residual
+- test whether the slope of the fitted line is zero
+
+Study Case: Mauna Loa Atmospheric CO2 Concentration
+
+```{r}
+# Load data co2
+co2
+```
+```{r}
+# Mengetahui deskripsi dari data co2
+help(co2)
+```
+
+```{r}
+# Mengetahui type data dari co2
+class(co2)
+```
+Diperoleh informasi bahwa tipe data dari co2 adalah ts yang berarti time series. 
+
+```{r}
+# Melakukan plot dari data time series co2
+
+plot(co2, main='Atmospheric CO2 Concentration')
+```
+
+Berdasarkan plot data diatas terlihat bahwa co2 mengalami peningkatan seiring bertambahnya waktu dalam periode ini. 
+
+Kita akan membuat beberapa asumsi dan juga mengikuti standar nasional
+- Respon (konsentrasi co2) dari pengamatan ke-i dapat dilambangkan dengan variabel acak Yi
+- Respon ini tergantung pada penjelasan variabel xi secara linier, dengan beberapa noise ditambahkan, seperti:
+Yi= linier model plus noise= b0+b1xi+ei
+
+Istilah kesalahan/error/galat (ei) dapat muncul dalam berbagai cara:
+- kesalahan pengukuran
+- kurangnya pengetahuan tentang pengaruh penting lainnya
+- dll
+
+Saat melakukan model regresi sederhana, kita mengasumsikan bahwa:
+- galat berdistribusi normal dengan rata-rata 0
+- semua galat memiliki varians yang sama (homoskedastik)
+- galat tidak terkait satu sama lain (galat bersifat independen diseluruh pengamatan)
+
+
+We can calculate the slope and intercept values by computation:
+
+```{r}
+co2.values=as.numeric(co2)
+
+co2.times=as.numeric(time(co2))
+
+SSxx = sum((co2.times-mean(co2.times))*(co2.times-mean(co2.times)))
+
+SSxy = sum((co2.values-mean(co2.values))*(co2.times-mean(co2.times)))
+
+slope=(SSxy/SSxx)
+
+intercept=mean(co2.values)-(slope*mean(co2.times))
+```
+
+Melihat hasil slope dan intercept
+```{r}
+slope
+intercept
+```
+Membuat model linier 
+```{r}
+co2.linear.model=lm(co2~time(co2))
+co2.linear.model
+```
+Membuat plot grafik dari linear model
+```{r}
+plot(co2,main='Atmospheric CO2 Concentration with Fitted Line')
+abline(co2.linear.model)
+```
+
+Compute residual by hand or manually
+
+- Asses normality of residuals
+
+```{r}
+co2.fitted.values=slope*co2.times+intercept
+co2.residuals=co2.values-co2.fitted.values
+```
+
+```{r}
+co2.fitted.values
+```
+
+```{r}
+co2.residuals
+```
+
+Computation of finding residuals
+```{r}
+co2.residuals=resid(co2.linear.model)
+co2.residuals
+```
+
+```{r}
+par(mfrow=c(1,3))
+(co2.residuals=resid(co2.linear.model))
+hist(co2.residuals, main='Histogram of CO2 Residuals')
+qqnorm(co2.residuals,main='Normal Probability Plot')
+qqline(co2.residuals)
+plot(co2.residuals~time(co2),main='Residual on Time')
+```
+
+Memperbesar plot
+```{r}
+plot(co2.residuals~time(co2),xlim=c(1960,1963),main="Zoomed in Residual on Time")
+```
+Study case: Student sleep on package 'sleep'
+```{r}
+#Load data sleep
+sleep
+```
+
+```{r}
+# Mencari tau deksripsi of sleep
+help(sleep)
+```
+
+```{r}
+#plot data
+
+plot(extra~group,data=sleep,main='Extra sleep in Gossett Data by Group')
+```
+Berdasarkan hasil plot yang telah dipelajari, kita dapat menyimpulkan bahwa plot dapat menghasilkan berbagai bentuk diagram, tergantung bentuk data yang akan divisualisasikan, seperti:
+- ketika antarvariabel bentuknya data point akan divisualisaikan menjadi scatterplot
+- ketika yang satu bentuk data points dan yang lainnya adalah sebuah kelas, maka akan membentuk histogram.
+
+Berdasarkan plot diatas, pertanyaan penelitian yang jelas adalah:
+Apakah ada perbedaaan dalam rata-rata respons terhadap masing-masing dari kedua obat tersebut?
+Uji yang akan digunakan untuk mengetahui adanya perbedaan rata-rata respons dari kedua obat tersebut yaitu uji mean.
+
+```{r}
+# for change dollar sign with attach
+attach(sleep)
+```
+
+```{r}
+extra.1=extra[group==1]
+extra.2=extra[group==2]
+```
+
+```{r}
+t.test(extra.1,extra.2,paired=TRUE,alternative="two.sided")
+```
+The statistic we have used is the Student-t for the paired differences xd=x−y
+t=(xbar-0)/(sd/akar(n))
+
+We have a=0.01, if p-value<a = rejected. So, we have p-value=0.002 < a=0.01 means rejected.
+
+Of course, for the test to be meaningful, we assume that the population of differences is normally distributed.
+```{r}
+diffs=extra.1-extra.2
+qqnorm(diffs, main='Normal Probability Plot')
+qqline(diffs)
+```
+While this is not a very sensitive test for normality, the hypothesis test itself is robust to departures from normality and, while that outlier is somewhat troubling, we can move forward.
+
+## B. Regression Model
+
+Karena data berpasangan atau paired data (yaitu merujuk pada data yang terdiri dari dua nilai yang terkait dengan satu sama lain, biasanya kedua nilai ini berasal dari pengukuran atau observasi yang dilakukan pada subjek atau entitas yang sama didua kondisi atau waktu yang berbeda, data ini sering digunakan dalam statistik untuk membandingkan dua keadaan atau kondisi pada kelompok yang sama, contoh mengukur berta badan seseorang sebelum dan setelah menjalani program diet.) ). Pada data tersebut berarti dua perbedaan repon dari dari setiap obat pada subject yang sama, dapat diplot dalam bentuk (x,y) dengan cara:
+
+```{r}
+plot(extra.2~extra.1, xlab='extra sleep with drug 1', ylab='extra sleep with drug 2', main='Extra Sleep Drug 2 against Extra Sleep Drug 1')
+sleep.linear.model=lm(extra.2~extra.1)
+abline(sleep.linear.model)
+```
+
+Regresi dari residual
+
+```{r}
+summary(sleep.linear.model)
+```
+Our model is then:
+extra.2 = 0.8899.extra. 1 + 1.6625
+
+Following questions:
+1. What do you predict for sleep gained with drug 2 if you know the sleep gained with drug 1 is 2 hours?
+
+```{r}
+extra2 = 0.8899*2 + 1.6625
+extra2
+```
+So, predicted for sleep gained with drug 2 if knowing the sleep gained with drug 1 is 2 hours is 3.4423 hours.
+
+2. What is the residual associated with the 3rd data point?
+```{r}
+residuals = resid(sleep.linear.model)
+residuals[3]
+```
+```{r}
+# alternative
+resid3 = extra.2[3]-(0.8899*extra.1[3]+1.6625)
+resid3
+```
+
